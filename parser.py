@@ -41,7 +41,7 @@ for message in messages:
     for formula in formulas:
         if formula.text.startswith('rolling d20') or formula.text.startswith('rolling 1d20'):
             is_plain_d20 = True
-    
+
     if is_plain_d20:
         for roll_div in roll_divs:
             try:
@@ -53,7 +53,7 @@ for message in messages:
     for roll_div in roll_divs:
         title = roll_div['title']
         if title.startswith('Rolling 1d20') or title.startswith('Rolling d20'):
-            result = (re.search('>(\d+)<', title)).group(1)
+            result = (re.search(r'>(\d+)<', title)).group(1)
             try:
                 rolls[most_recent_by].append(int(result))
             except:
