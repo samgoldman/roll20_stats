@@ -51,13 +51,19 @@ for message in messages:
 
     roll_divs = message.find_all('span', {'class': 'inlinerollresult'})
     for roll_div in roll_divs:
-        title = roll_div['title']
-        if title.startswith('Rolling 1d20') or title.startswith('Rolling d20'):
-            result = (re.search(r'>(\d+)<', title)).group(1)
-            try:
-                rolls[most_recent_by].append(int(result))
-            except:
-                pass
+        field = 'title'
+        if not 'title' in roll_div.attrs:
+            field = 'original-title'
+
+        title = roll_div[field]
+        if title.startswith('Rolling 1d20') or title.startswith('Rolling d20') or title.startswith('Rolling {1d20'):
+            results = [res.group(1) for res in (re.finditer('>(\d+)<', title))]
+            for result in results:
+                try:
+                    rolls[most_recent_by].append(int(result))
+                except:
+                    pass
+
 
 for key in list(rolls):
     if len(rolls[key]) == 0:

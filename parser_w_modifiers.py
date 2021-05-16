@@ -51,8 +51,12 @@ for message in messages:
 
     roll_divs = message.find_all('span', {'class': 'inlinerollresult'})
     for roll_div in roll_divs:
-        title = roll_div['title']
-        if title.startswith('Rolling 1d20') or title.startswith('Rolling d20'):
+        field = 'title'
+        if not 'title' in roll_div.attrs:
+            field = 'original-title'
+
+        title = roll_div[field]
+        if title.startswith('Rolling 1d20') or title.startswith('Rolling d20') or title.startswith('Rolling {1d20'):
             result = roll_div.text
             try:
                 rolls[most_recent_by].append(int(result))
